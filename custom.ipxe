@@ -1,6 +1,6 @@
 #!ipxe
 
-# Arch Linux Operating System
+# CachyOS Operating System
 # Modificado para usar servidor local: http://192.168.0.120:8000/
 
 set os_arch ${arch}
@@ -18,17 +18,17 @@ set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
 imgfree
 set dir arch/boot/${os_arch}
 set params archiso_http_srv=${local_server} archisobasedir=arch cms_verify=y ${ipparam} net.ifnames=0
-kernel ${local_server}${dir}/vmlinuz-linux ${params}
-initrd ${local_server}${dir}/initramfs-linux.img
+kernel ${local_server}${dir}/vmlinuz-linux-cachyos ${params}
+initrd ${local_server}${dir}/initramfs-linux-cachyos.img
 echo
 echo MD5sums:
-md5sum vmlinuz-linux initramfs-linux.img
+md5sum vmlinuz-linux-cachyos initramfs-linux-cachyos.img
 boot
 
 :unsupported_arch
 echo Architecture ${os_arch} is not supported (only x86_64).
 exit 0
 
-:archlinux_exit
+:cachyos_exit
 clear menu
 exit 0
