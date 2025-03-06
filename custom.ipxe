@@ -1,12 +1,32 @@
 #!ipxe
-###
-### netboot.xyz-custom menu
-###
 
-:start
-echo Hello world!
-sleep 10
-goto custom_exit
+# Arch Linux Operating System
+# Modified for local server: http://192.168.0.120:8000/
 
-:custom_exit
+set os_arch ${arch}
+iseq ${os_arch} x86_64 && set os_arch x86_64 ||
+iseq ${os_arch} i386 && set os_arch i686 ||
+isset ${dhcp-server} || goto static_ip
+set ipparam BOOTIF=${netX/mac} ip=dhcp
+set local_server http://192.168.0.120:8000/
+goto boot
+
+:static_ip
+set local_server http://192.168.0.120:8000/
+set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
+
+:boot
+imgfree
+set dir arch/boot/${os_arch}
+set squashfs_url ${local_server}arch/x86_64/airootfs.sfs
+set params archiso_http_srv=${squashfs_url} archisobasedir=arch cms_verify=y ${ipparam} net.ifnames=0
+kernel ${local_server}${dir}/vmlinuz-linux ${params}
+initrd ${local_server}${dir}/initramfs-linux.img
+echo
+echo MD5sums:
+md5sum vmlinuz-linux initramfs-linux.img
+boot
+
+:archlinux_exit
+clear menu
 exit 0
