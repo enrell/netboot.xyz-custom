@@ -2,6 +2,7 @@
 
 # CachyOS Operating System
 # Modificado para usar servidor local: http://192.168.0.120:8000/
+# Sem verificações de integridade de arquivos
 
 set os_arch ${arch}
 iseq ${os_arch} x86_64 && set os_arch x86_64 || goto unsupported_arch
@@ -17,12 +18,9 @@ set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
 :boot
 imgfree
 set dir arch/boot/${os_arch}
-set params archiso_http_srv=${local_server} archisobasedir=arch cms_verify=y ${ipparam} net.ifnames=0
+set params archiso_http_srv=${local_server} archisobasedir=arch ${ipparam} net.ifnames=0
 kernel ${local_server}${dir}/vmlinuz-linux-cachyos ${params}
 initrd ${local_server}${dir}/initramfs-linux-cachyos.img
-echo
-echo MD5sums:
-md5sum vmlinuz-linux-cachyos initramfs-linux-cachyos.img
 boot
 
 :unsupported_arch
