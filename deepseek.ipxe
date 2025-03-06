@@ -1,0 +1,15 @@
+#!ipxe
+
+# Arch Linux PXE Boot - Local Server
+set local_server http://192.168.0.120:8000
+set os_arch x86_64  # Force x86_64 since that's what you're hosting
+
+:start
+isset ${netX/ip} || dhcp
+set ipparam BOOTIF=${netX/mac} ip=dhcp
+
+:boot_arch
+imgfree
+kernel ${local_server}/arch/boot/x86_64/vmlinuz-linux initrd=initramfs-linux.img archiso_http_srv=${local_server}/arch/ archisobasedir=arch ip=dhcp
+initrd ${local_server}/arch/boot/x86_64/initramfs-linux.img
+boot
