@@ -18,7 +18,7 @@ set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
 :boot
 imgfree
 set dir arch/boot/${os_arch}
-set params archiso_http_srv=${local_server} archisobasedir=arch ${ipparam} net.ifnames=0
+set params archiso_http_srv=${local_server} archisobasedir=arch copytoram=y ${ipparam} net.ifnames=0
 kernel ${local_server}${dir}/vmlinuz-linux-cachyos ${params}
 initrd ${local_server}${dir}/initramfs-linux-cachyos.img
 boot
