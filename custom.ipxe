@@ -1,11 +1,10 @@
 #!ipxe
 
 # Arch Linux Operating System
-# Modified for local server: http://192.168.0.120:8000/
+# Modificado para usar servidor local: http://192.168.0.120:8000/
 
 set os_arch ${arch}
-iseq ${os_arch} x86_64 && set os_arch x86_64 ||
-iseq ${os_arch} i386 && set os_arch i686 ||
+iseq ${os_arch} x86_64 && set os_arch x86_64 || goto unsupported_arch
 isset ${dhcp-server} || goto static_ip
 set ipparam BOOTIF=${netX/mac} ip=dhcp
 set local_server http://192.168.0.120:8000/
@@ -25,6 +24,10 @@ echo
 echo MD5sums:
 md5sum vmlinuz-linux initramfs-linux.img
 boot
+
+:unsupported_arch
+echo Architecture ${os_arch} is not supported (only x86_64).
+exit 0
 
 :archlinux_exit
 clear menu
