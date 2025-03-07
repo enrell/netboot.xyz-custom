@@ -1,7 +1,8 @@
 #!ipxe
 
 # CachyOS Operating System
-# Modificado para usar servidor local: http://192.168.0.120:8000/
+# Modificado para carregar a ISO como LiveOS na RAM usando memdisk
+# ISO localizada em: http://192.168.0.120:8000/arch/cachyos.iso
 # Sem verificações de integridade de arquivos
 
 set os_arch ${arch}
@@ -17,10 +18,16 @@ set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
 
 :boot
 imgfree
-set dir arch/boot/${os_arch}
-set params archiso_http_srv=${local_server} archisobasedir=arch copytoram=y ${ipparam} net.ifnames=0
-kernel ${local_server}${dir}/vmlinuz-linux-cachyos ${params}
-initrd ${local_server}${dir}/initramfs-linux-cachyos.img
+# Caminho para o memdisk e a ISO
+set iso_file arch/cachyos.iso  # Caminho relativo ao local_server
+set memdisk_url http://boot.netboot.xyz/memdisk  # Ou hospede localmente, se preferir
+
+# Carrega o memdisk como kernel e a ISO como initrd
+kernel ${memdisk_url} iso raw
+initrd ${local_server}${iso_file}
+
+# Parâmetros para carregar o sistema na RAM
+imgargs memdisk iso raw copytoram=y ${ipparam} net.ifnames=0 archiso_http_srv=${local_server} archisobasedir=arch
 boot
 
 :unsupported_arch
