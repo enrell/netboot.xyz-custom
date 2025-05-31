@@ -1,6 +1,6 @@
 #!ipxe
 
-# CachyOS Operating System
+# Manjaro Operating System
 # Configurado para usar servidor local: http://192.168.0.120:8000/
 
 set os_arch ${arch}
@@ -18,8 +18,8 @@ set ipparam BOOTIF=${netX/mac} ip=${ip}::${gateway}:${netmask}
 imgfree
 set dir arch/boot/${os_arch}
 set params archiso_http_srv=${local_server} archisobasedir=arch cow_spacesize=12G ${ipparam} net.ifnames=0
-kernel ${local_server}${dir}/vmlinuz-linux-cachyos ${params}
-initrd ${local_server}${dir}/initramfs-linux-cachyos.img
+kernel ${local_server}${dir}/vmlinuz-x86_64 ${params}
+initrd ${local_server}${dir}/initramfs-x86_64.img
 boot
 
 :unsupported_arch
